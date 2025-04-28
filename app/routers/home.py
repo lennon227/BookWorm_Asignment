@@ -91,7 +91,7 @@ def get_top_sale_books(db: Session = Depends(get_db)):
         .filter(Discount.discount_end_date >= today)
         .filter(Discount.discount_price < Book.book_price)  # Đảm bảo discount thực sự giảm giá
         .order_by(desc("sub_price"))  # Sắp xếp theo mức giảm giá cao nhất
-        .limit(8)
+        .limit(10)
         .all()
     )
     
