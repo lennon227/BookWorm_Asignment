@@ -1,0 +1,16 @@
+SELECT 
+    b.id AS book_id,
+    b.book_title,
+    a.author_name,
+    b.book_price AS price,
+    d.discount_price,
+    (b.book_price - d.discount_price) AS sub_price,
+    b.book_cover_photo AS image
+FROM book b
+JOIN author a ON b.author_id = a.id
+JOIN discount d ON b.id = d.book_id
+WHERE d.discount_start_date <= CURRENT_DATE
+  AND d.discount_end_date >= CURRENT_DATE
+  AND d.discount_price < b.book_price
+ORDER BY sub_price DESC
+LIMIT 10;

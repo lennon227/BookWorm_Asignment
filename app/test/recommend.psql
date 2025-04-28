@@ -1,0 +1,33 @@
+WITH avg_ratings AS (
+    SELECT 
+        r.book_id,
+        AVG(r.rating_start::numeric) AS avg_rating
+    FROM review r
+    GROUP BY r.book_id
+),
+current_discounts AS (
+    SELECT 
+        d.book_id,
+        d.discount_price
+    FROM discount d
+    WHERE d.discount_start_date <= CURRENT_DATE
+      AND d.discount_end_date >= CURRENT_DATE
+)
+
+SELECT 
+    b.id AS book_id,
+    b.book_title,
+    a.author_name,
+    b.book_price AS price,
+    cd.discount_price,
+    COALESCE(cd.discount_price, b.book_price) AS final_price,
+    ar.avg_rating,
+    b.book_cover_photo AS image
+FROM book b
+JOIN author a ON b.author_id = a.id
+JOIN avg_ratings ar ON b.id = ar.book_id
+LEFT JOIN current_discounts cd ON b.id = cd.book_id
+ORDER BY 
+    ar.avg_rating DESC, 
+    final_price ASC
+LIMIT 8;
