@@ -11,7 +11,7 @@ class Book(BaseModel):
     book_title = Column(String(255), nullable=False)
     book_summary = Column(Text)
     book_price = Column(Numeric(5, 2), nullable=False)
-    book_cover_photo = Column(String(20))
+    book_cover_photo = Column(String(255))
     
     category = relationship("Category", back_populates="books")
     author = relationship("Author", back_populates="books")
